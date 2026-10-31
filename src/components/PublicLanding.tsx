@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { PackageOffer, SpecialIncentive, SummerActivity, AgazBook, Language, UserRole, Tutor } from '../types';
 import { translations } from '../data/translations';
+import mentoraLogo from '../mentora.jpg';
 import { 
   GraduationCap, Sparkles, Check, Star, ShieldCheck, HeartHandshake, 
   Dumbbell, BookOpen, Palette, Puzzle, Trophy, Feather, Music, Gamepad2, 
@@ -725,7 +726,7 @@ export const PublicLanding: React.FC<PublicLandingProps> = ({
       <footer className="pt-8 border-t border-slate-200 dark:border-slate-800 text-xs text-slate-500 dark:text-slate-400 flex flex-col sm:flex-row items-center justify-between gap-4">
         <div className="flex items-center gap-3">
           <img
-            src="/src/mentora.jpg"
+            src={mentoraLogo}
             alt="Mentora"
             className="w-20 h-7 rounded-lg object-contain bg-white"
           />

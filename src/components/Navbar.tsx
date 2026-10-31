@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { UserRole, Language } from '../types';
 import { translations } from '../data/translations';
+import mentoraLogo from '../mentora.jpg';
 import { 
   Globe, GraduationCap, Sparkles, BookOpen, ChevronDown, 
   User, Shield, Home, Briefcase, Check, ArrowRight 
@@ -79,7 +80,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           >
             <div className="w-20 h-11 rounded-xl overflow-hidden bg-white shadow-xs border border-slate-200/80 shrink-0 transition-transform group-hover:scale-105">
               <img
-                src="/src/mentora.jpg"
+                src={mentoraLogo}
                 alt="Mentora Logo"
                 className="w-full h-full object-contain"
               />

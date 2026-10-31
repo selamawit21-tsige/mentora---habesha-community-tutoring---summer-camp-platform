@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { UserRole, Language } from '../../types';
 import { translations } from '../../data/translations';
+import mentoraLogo from '../../mentora.jpg';
 import { 
   User, GraduationCap, Shield, ArrowLeft, Lock, Phone, 
   Mail, KeyRound, Sparkles, CheckCircle2, ArrowRight 
@@ -63,7 +64,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({
         <div className="text-center space-y-3">
           <div className="w-28 h-16 rounded-2xl mx-auto overflow-hidden bg-white shadow-sm border border-slate-200 p-1">
             <img
-              src="/src/mentora.jpg"
+              src={mentoraLogo}
               alt="Mentora"
               className="w-full h-full object-contain"
             />
