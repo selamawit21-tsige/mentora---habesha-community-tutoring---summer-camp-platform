@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { Tutor, Student, ConnectionRequest, StudentGrowthLog, Language } from '../../types';
 import { translations } from '../../data/translations';
+import { getGradeLabel } from '../../data/gradeLevels';
+import { TutorAvatar } from '../TutorAvatar';
 import { 
   ShieldCheck, Users, CheckCircle2, Clock, AlertCircle, 
-  Award, ArrowRight, BookOpen, Sparkles, Check, XCircle 
+  Award, ArrowRight, BookOpen, Sparkles, Check, XCircle, UserPlus
 } from 'lucide-react';
 
 interface AdminDashboardProps {
@@ -15,6 +17,7 @@ interface AdminDashboardProps {
   onOpenConnectModal: (request: ConnectionRequest) => void;
   onApproveBonus: (logId: string) => void;
   onVerifyTutor: (tutorId: string) => void;
+  onOpenRegisterTutor: () => void;
   onBackToHome: () => void;
 }
 
@@ -27,6 +30,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   onOpenConnectModal,
   onApproveBonus,
   onVerifyTutor,
+  onOpenRegisterTutor,
   onBackToHome,
 }) => {
   const t = translations[language];
@@ -151,7 +155,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                   <div className="flex items-center gap-2 flex-wrap">
                     <span className="font-mono text-xs font-bold text-slate-500">#{req.id}</span>
                     <h3 className="font-bold text-base text-slate-900 dark:text-white">
-                      {req.studentName} ({language === 'am' ? `${req.grade}ኛ ክፍል` : `Grade ${req.grade}`})
+                      {req.studentName} ({getGradeLabel(req.grade, language)})
                     </h3>
                     <span>·</span>
                     <span className="text-xs text-slate-600 dark:text-slate-300">
@@ -247,7 +251,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 <tr key={req.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
                   <td className="py-3 px-3 font-mono text-slate-400 font-semibold">#{req.id}</td>
                   <td className="py-3 px-3 font-semibold text-slate-900 dark:text-white">
-                    {req.studentName} ({language === 'am' ? `${req.grade}ኛ ክፍል` : `Gr ${req.grade}`})
+                    {req.studentName} ({getGradeLabel(req.grade, language)})
                   </td>
                   <td className="py-3 px-3 text-slate-600 dark:text-slate-300">
                     {req.parentName}
@@ -305,7 +309,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                   </span>
                   <span>·</span>
                   <span className="text-xs text-slate-600 dark:text-slate-300">
-                    Student: <strong>{log.studentName}</strong> ({log.grade}th grade)
+                    Student: <strong>{log.studentName}</strong> ({getGradeLabel(log.grade, language)})
                   </span>
                 </div>
 
@@ -352,7 +356,8 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
       {/* Section 4: Verified Tutor Registry & IDs */}
       <section className="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-xs space-y-4">
-        <div>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
           <h2 className="text-lg font-bold text-slate-900 dark:text-white">
             {t.tutorManagement}
           </h2>
@@ -361,6 +366,14 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
               ? 'የአስጠኚዎች ብሔራዊ መታወቂያ እና የዩኒቨርሲቲ ዲፕሎማ ማረጋገጫ'
               : 'Official government ID verifications and university academic credentials'}
           </p>
+          </div>
+          <button
+            onClick={onOpenRegisterTutor}
+            className="inline-flex items-center justify-center gap-2 px-4 py-2.5 text-xs font-bold text-slate-950 bg-amber-400 hover:bg-amber-300 rounded-xl shadow-xs transition-colors cursor-pointer shrink-0"
+          >
+            <UserPlus className="w-4 h-4" />
+            {language === 'am' ? 'አስጠኚ መዝግብ' : 'Register Tutor'}
+          </button>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -370,11 +383,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
               className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/30 flex items-center justify-between gap-4"
             >
               <div className="flex items-center gap-3">
-                <img
+                <TutorAvatar
                   src={tutor.avatar}
-                  alt={tutor.name}
+                  name={tutor.name}
                   className="w-12 h-12 rounded-xl object-cover border border-slate-200 dark:border-slate-700 shrink-0"
-                  referrerPolicy="no-referrer"
                 />
                 <div className="space-y-0.5">
                   <h4 className="font-bold text-sm text-slate-900 dark:text-white">

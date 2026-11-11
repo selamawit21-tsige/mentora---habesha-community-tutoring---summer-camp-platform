@@ -18,7 +18,7 @@ export interface Tutor {
   monthlyRate: number; // ETB (e.g. 3500)
   subjects: string[];
   amharicSubjects: string[];
-  gradesSupported: number[]; // e.g. [1, 2, 3, 4, 5, 6]
+  gradesSupported: number[]; // KG 1-3 use -3, -2, -1; grades 1-8 use their grade number
   bio: string;
   amharicBio: string;
   characterRating: number; // 1-5 rating for mentorship/ethics
@@ -35,7 +35,7 @@ export interface Student {
   parentPhone: string;
   studentName: string;
   avatar?: string;
-  grade: number; // 1 to 6
+  grade: number; // KG 1-3 use -3, -2, -1; grades 1-8 use their grade number
   age: number;
   school: string;
   subjectsNeeded: string[];

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Tutor, Student, ConnectionRequest, Language } from '../../types';
 import { translations } from '../../data/translations';
+import { getGradeLabel, gradeLevels } from '../../data/gradeLevels';
 import { X, CheckCircle, GraduationCap, AlertCircle, Sparkles } from 'lucide-react';
 
 interface RequestTutorModalProps {
@@ -102,8 +103,8 @@ export const RequestTutorModal: React.FC<RequestTutorModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-xs overflow-y-auto">
-      <div className="relative w-full max-w-2xl bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 p-6 md:p-8 my-8 transition-all">
+    <div className="fixed inset-0 z-50 flex items-start sm:items-center justify-center p-2 sm:p-4 bg-slate-950/70 backdrop-blur-xs overflow-y-auto">
+      <div className="relative w-full max-w-2xl max-h-[calc(100dvh-2rem)] overflow-y-auto overscroll-contain bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 p-4 sm:p-6 md:p-8 my-2 sm:my-8 transition-all">
         
         {/* Header */}
         <div className="flex items-center justify-between pb-4 border-b border-slate-200 dark:border-slate-800">
@@ -163,16 +164,16 @@ export const RequestTutorModal: React.FC<RequestTutorModalProps> = ({
 
               <div>
                 <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
-                  {language === 'am' ? 'የክፍል ደረጃ (ከ1ኛ - 6ኛ)' : 'Grade Level (1 to 6)'} *
+                  {language === 'am' ? 'የክፍል ደረጃ (KG 1 - ከ8ኛ ክፍል)' : 'Grade Level (KG 1 through Grade 8)'} *
                 </label>
                 <select
                   value={grade}
                   onChange={(e) => setGrade(Number(e.target.value))}
                   className="w-full px-3.5 py-2 text-sm rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-900/30"
                 >
-                  {[1, 2, 3, 4, 5, 6].map((g) => (
-                    <option key={g} value={g}>
-                      {language === 'am' ? `${g}ኛ ክፍል` : `Grade ${g}`}
+                  {gradeLevels.map(({ value }) => (
+                    <option key={value} value={value}>
+                      {getGradeLabel(value, language)}
                     </option>
                   ))}
                 </select>
@@ -271,6 +272,38 @@ export const RequestTutorModal: React.FC<RequestTutorModalProps> = ({
                     {language === 'am' ? 'አነስተኛ ቡድን (ከ3-5 ተማሪዎች) በጋራ የሚማሩበት' : 'Interactive small cohort of 3–5 same-grade students'}
                   </p>
                 </div>
+              </div>
+            </div>
+
+            {/* Learning Focus */}
+            <div>
+              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-2">
+                {language === 'am' ? 'የትምህርት ድጋፍ ፍላጎቶች' : 'Learning Focus (select all that apply)'}
+              </label>
+              <div className="flex flex-wrap gap-2">
+                {[
+                  'Early Literacy & Phonics',
+                  'Early Numeracy',
+                  'Creative Learning',
+                  'Mathematics',
+                  'English',
+                  'General Science',
+                  'Amharic (አማርኛ)',
+                  'Social Studies',
+                ].map((subject) => (
+                  <button
+                    key={subject}
+                    type="button"
+                    onClick={() => handleSubjectToggle(subject)}
+                    className={`px-3 py-1.5 text-xs font-semibold rounded-lg border transition-colors cursor-pointer ${
+                      targetSubjects.includes(subject)
+                        ? 'border-blue-900 bg-blue-50 text-blue-950 dark:border-amber-400 dark:bg-amber-950/30 dark:text-amber-300'
+                        : 'border-slate-200 bg-white text-slate-600 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300'
+                    }`}
+                  >
+                    {subject}
+                  </button>
+                ))}
               </div>
             </div>
 

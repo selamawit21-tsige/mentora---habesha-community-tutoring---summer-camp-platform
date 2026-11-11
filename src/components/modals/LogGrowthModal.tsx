@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Student, StudentGrowthLog, Language } from '../../types';
 import { translations } from '../../data/translations';
+import { getGradeLabel } from '../../data/gradeLevels';
 import { X, Award, CheckCircle, HeartHandshake, Dumbbell, ShieldCheck, BookOpen } from 'lucide-react';
 
 interface LogGrowthModalProps {
@@ -81,8 +82,8 @@ export const LogGrowthModal: React.FC<LogGrowthModalProps> = ({
               </h3>
               <p className="text-xs text-slate-500 dark:text-slate-400">
                 {language === 'am' 
-                  ? `ተማሪ፡ ${student.studentName} (${student.grade}ኛ ክፍል) · መምህር፡ ${tutorName}`
-                  : `Student: ${student.studentName} (Grade ${student.grade}) · Mentor: ${tutorName}`}
+                  ? `ተማሪ፡ ${student.studentName} (${getGradeLabel(student.grade, language)}) · መምህር፡ ${tutorName}`
+                  : `Student: ${student.studentName} (${getGradeLabel(student.grade, language)}) · Mentor: ${tutorName}`}
               </p>
             </div>
           </div>

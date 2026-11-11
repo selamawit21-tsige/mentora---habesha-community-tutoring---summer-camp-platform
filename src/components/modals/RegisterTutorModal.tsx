@@ -1,6 +1,8 @@
 import React, { useState, useRef } from 'react';
 import { Tutor, Language } from '../../types';
 import { translations } from '../../data/translations';
+import { getGradeLabel, gradeLevels } from '../../data/gradeLevels';
+import { TutorAvatar } from '../TutorAvatar';
 import { 
   X, Camera, Upload, GraduationCap, Check, ShieldCheck, 
   Sparkles, BookOpen, User, Phone, Mail, Award 
@@ -13,15 +15,6 @@ interface RegisterTutorModalProps {
   onRegisterTutor: (newTutor: Tutor) => void;
 }
 
-const habeshaPresetPortraits = [
-  { url: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&auto=format&fit=crop&q=80', label: 'Bethlehem T. (AAU)' },
-  { url: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&auto=format&fit=crop&q=80', label: 'Dawit M. (Hawassa)' },
-  { url: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&auto=format&fit=crop&q=80', label: 'Selamawit H. (ASTU)' },
-  { url: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&auto=format&fit=crop&q=80', label: 'Natnael G. (Jimma)' },
-  { url: 'https://images.unsplash.com/photo-1567532939604-b6b5b0db2604?w=400&auto=format&fit=crop&q=80', label: 'Tsion K. (Addis Ababa)' },
-  { url: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=400&auto=format&fit=crop&q=80', label: 'Mahlet A. (Mekelle)' },
-];
-
 export const RegisterTutorModal: React.FC<RegisterTutorModalProps> = ({
   isOpen,
   onClose,
@@ -31,7 +24,7 @@ export const RegisterTutorModal: React.FC<RegisterTutorModalProps> = ({
   const t = translations[language];
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const [avatar, setAvatar] = useState(habeshaPresetPortraits[0].url);
+  const [avatar, setAvatar] = useState('');
   const [name, setName] = useState('');
   const [amharicName, setAmharicName] = useState('');
   const [university, setUniversity] = useState('Addis Ababa University');
@@ -41,7 +34,7 @@ export const RegisterTutorModal: React.FC<RegisterTutorModalProps> = ({
   const [hourlyRate, setHourlyRate] = useState(350);
   const [monthlyRate, setMonthlyRate] = useState(3500);
   const [selectedSubjects, setSelectedSubjects] = useState<string[]>(['Mathematics', 'English']);
-  const [selectedGrades, setSelectedGrades] = useState<number[]>([1, 2, 3, 4]);
+  const [selectedGrades, setSelectedGrades] = useState<number[]>([-3, -2, -1, 1, 2, 3, 4]);
   const [bio, setBio] = useState('');
   const [amharicBio, setAmharicBio] = useState('');
 
@@ -132,6 +125,9 @@ export const RegisterTutorModal: React.FC<RegisterTutorModalProps> = ({
         if (s === 'English') return 'እንግሊዝኛ';
         if (s === 'General Science') return 'ሳይንስ';
         if (s === 'Amharic (አማርኛ)') return 'አማርኛ ቋንቋ';
+        if (s === 'Early Literacy & Phonics') return 'ቅድመ ንባብ እና ፎኒክስ';
+        if (s === 'Early Numeracy') return 'ቅድመ ሒሳብ';
+        if (s === 'Creative Learning') return 'ፈጠራዊ ትምህርት';
         return s;
       }),
       gradesSupported: selectedGrades,
@@ -149,8 +145,8 @@ export const RegisterTutorModal: React.FC<RegisterTutorModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-xs overflow-y-auto">
-      <div className="relative w-full max-w-2xl bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-800 p-6 md:p-8 my-8 transition-all">
+    <div className="fixed inset-0 z-50 flex items-start sm:items-center justify-center p-2 sm:p-4 bg-slate-950/70 backdrop-blur-xs overflow-y-auto">
+      <div className="relative w-full max-w-2xl max-h-[calc(100dvh-2rem)] overflow-y-auto overscroll-contain bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-800 p-4 sm:p-6 md:p-8 my-2 sm:my-8 transition-all">
         
         {/* Header */}
         <div className="flex items-center justify-between pb-4 border-b border-slate-200 dark:border-slate-800">
@@ -165,7 +161,7 @@ export const RegisterTutorModal: React.FC<RegisterTutorModalProps> = ({
               <p className="text-xs text-slate-500 dark:text-slate-400">
                 {language === 'am' 
                   ? 'የቤት ለቤት አስጠኚ ሆነው ይመዝገቡ፤ መገለጫዎን እና ፎቶዎን ያዘጋጁ' 
-                  : 'Join Mentora as a certified Home-to-Home tutor and start mentoring Grade 1-6 students'}
+                  : 'Join Mentora as a certified Home-to-Home tutor and support KG 1 through Grade 8'}
               </p>
             </div>
           </div>
@@ -184,7 +180,7 @@ export const RegisterTutorModal: React.FC<RegisterTutorModalProps> = ({
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
                 <Camera className="w-4 h-4 text-amber-500" />
-                <span>{language === 'am' ? 'የአስጠኚ ፎቶዎን ይምረጡ ወይም ይስቀሉ' : 'Profile Picture (Select or Upload)'} *</span>
+                <span>{language === 'am' ? 'የአስጠኚውን ፎቶ ከመሣሪያው ይስቀሉ' : 'Tutor Photo (Upload from Device)'}</span>
               </span>
               <span className="text-[11px] text-amber-600 dark:text-amber-400 font-semibold">
                 Habesha Community Friendly
@@ -198,11 +194,10 @@ export const RegisterTutorModal: React.FC<RegisterTutorModalProps> = ({
                 className="relative group cursor-pointer shrink-0"
                 title="Click to select image file from computer or phone"
               >
-                <img
-                  src={avatar}
-                  alt="Tutor Avatar Preview"
-                  className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl object-cover border-3 border-amber-400 shadow-md group-hover:opacity-85 transition-opacity"
-                  referrerPolicy="no-referrer"
+                <TutorAvatar
+                src={avatar}
+                name={name || (language === 'am' ? 'አስጠኚ' : 'Tutor')}
+                className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl object-cover border-3 border-amber-400 shadow-md group-hover:opacity-85 transition-opacity"
                 />
                 <div className="absolute inset-0 bg-black/40 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white text-[10px] font-bold">
                   {language === 'am' ? 'ፎቶ ምረጥ' : 'Choose Photo'}
@@ -228,30 +223,8 @@ export const RegisterTutorModal: React.FC<RegisterTutorModalProps> = ({
                 </button>
 
                 <p className="text-[11px] text-slate-500 dark:text-slate-400">
-                  {language === 'am' ? 'ወይም ከታች ከተዘጋጁት የሀበሻ ምስሎች ይምረጡ:' : 'Or pick an authentic Habesha portrait below:'}
+                  {language === 'am' ? 'የአስጠኚውን ፎቶ በቀጥታ ከስልክ ወይም ከኮምፒውተር ይምረጡ።' : 'Choose the tutor’s actual photo from a phone or computer.'}
                 </p>
-
-                {/* Preset Avatars */}
-                <div className="grid grid-cols-6 gap-1.5 pt-1">
-                  {habeshaPresetPortraits.map((preset, i) => (
-                    <div
-                      key={i}
-                      onClick={() => setAvatar(preset.url)}
-                      className={`p-1 rounded-xl border cursor-pointer transition-all text-center ${
-                        avatar === preset.url
-                          ? 'border-amber-500 bg-amber-100 dark:bg-amber-950/60 ring-2 ring-amber-400'
-                          : 'border-slate-200 dark:border-slate-700 hover:border-slate-300 bg-white dark:bg-slate-900'
-                      }`}
-                    >
-                      <img
-                        src={preset.url}
-                        alt={preset.label}
-                        className="w-9 h-9 rounded-lg object-cover mx-auto"
-                        referrerPolicy="no-referrer"
-                      />
-                    </div>
-                  ))}
-                </div>
               </div>
             </div>
           </div>
@@ -349,21 +322,21 @@ export const RegisterTutorModal: React.FC<RegisterTutorModalProps> = ({
           {/* Grades Supported */}
           <div>
             <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
-              {language === 'am' ? 'የሚያስተምሯቸው የክፍል ደረጃዎች (ከ1-6)' : 'Elementary Grades You Can Teach (Select all that apply):'}
+              {language === 'am' ? 'የሚያስተምሯቸው ደረጃዎች (KG 1 - ከ8ኛ ክፍል)' : 'Grades You Can Teach (KG 1 through Grade 8):'}
             </label>
             <div className="flex flex-wrap gap-2">
-              {[1, 2, 3, 4, 5, 6].map((g) => (
+              {gradeLevels.map(({ value }) => (
                 <button
                   type="button"
-                  key={g}
-                  onClick={() => handleGradeToggle(g)}
+                  key={value}
+                  onClick={() => handleGradeToggle(value)}
                   className={`px-3 py-1.5 text-xs font-bold rounded-xl border cursor-pointer transition-all ${
-                    selectedGrades.includes(g)
+                    selectedGrades.includes(value)
                       ? 'bg-blue-950 dark:bg-amber-500 text-white dark:text-slate-950 border-transparent shadow-xs'
                       : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700'
                   }`}
                 >
-                  Grade {g}
+                  {getGradeLabel(value, language)}
                 </button>
               ))}
             </div>
@@ -375,7 +348,16 @@ export const RegisterTutorModal: React.FC<RegisterTutorModalProps> = ({
               {language === 'am' ? 'የሚያስተምሯቸው የትምህርት አይነቶች' : 'Subjects Offered:'}
             </label>
             <div className="flex flex-wrap gap-2">
-              {['Mathematics', 'English', 'General Science', 'Amharic (አማርኛ)', 'Social Studies'].map((subj) => (
+              {[
+                'Early Literacy & Phonics',
+                'Early Numeracy',
+                'Creative Learning',
+                'Mathematics',
+                'English',
+                'General Science',
+                'Amharic (አማርኛ)',
+                'Social Studies',
+              ].map((subj) => (
                 <button
                   type="button"
                   key={subj}

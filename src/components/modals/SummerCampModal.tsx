@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { SummerActivity, Language } from '../../types';
 import { translations } from '../../data/translations';
+import { getGradeLabel, gradeLevels } from '../../data/gradeLevels';
 import { X, Sparkles, CheckCircle, Trophy, Calendar, Check } from 'lucide-react';
 
 interface SummerCampModalProps {
@@ -51,8 +52,8 @@ export const SummerCampModal: React.FC<SummerCampModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-xs overflow-y-auto">
-      <div className="relative w-full max-w-2xl bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 p-6 md:p-8 my-8 transition-all">
+    <div className="fixed inset-0 z-50 flex items-start sm:items-center justify-center p-2 sm:p-4 bg-slate-950/70 backdrop-blur-xs overflow-y-auto">
+      <div className="relative w-full max-w-2xl max-h-[calc(100dvh-2rem)] overflow-y-auto overscroll-contain bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 p-4 sm:p-6 md:p-8 my-2 sm:my-8 transition-all">
         
         {/* Header */}
         <div className="flex items-center justify-between pb-4 border-b border-slate-200 dark:border-slate-800">
@@ -112,16 +113,16 @@ export const SummerCampModal: React.FC<SummerCampModalProps> = ({
 
               <div>
                 <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
-                  {language === 'am' ? 'የክፍል ደረጃ (ከ1ኛ - 6ኛ)' : 'Grade Level (1 to 6)'}
+                  {language === 'am' ? 'የክፍል ደረጃ (KG 1 - ከ8ኛ ክፍል)' : 'Grade Level (KG 1 through Grade 8)'}
                 </label>
                 <select
                   value={grade}
                   onChange={(e) => setGrade(Number(e.target.value))}
                   className="w-full px-3.5 py-2 text-sm rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-500/30"
                 >
-                  {[1, 2, 3, 4, 5, 6].map((g) => (
-                    <option key={g} value={g}>
-                      {language === 'am' ? `${g}ኛ ክፍል` : `Grade ${g}`}
+                  {gradeLevels.map(({ value }) => (
+                    <option key={value} value={value}>
+                      {getGradeLabel(value, language)}
                     </option>
                   ))}
                 </select>

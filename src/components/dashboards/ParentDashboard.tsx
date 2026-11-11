@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Tutor, Student, ConnectionRequest, Language } from '../../types';
 import { translations } from '../../data/translations';
+import { getGradeLabel, gradeLevels } from '../../data/gradeLevels';
+import { TutorAvatar } from '../TutorAvatar';
 import { 
   Search, Filter, GraduationCap, Star, ShieldCheck, Clock, 
   ArrowRight, HeartHandshake, Dumbbell, Award, Plus, Sparkles, 
@@ -141,7 +143,7 @@ export const ParentDashboard: React.FC<ParentDashboardProps> = ({
                   </h3>
                   <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                     <span className="font-semibold text-blue-900 dark:text-amber-400">
-                      {language === 'am' ? `${child.grade}ኛ ክፍል` : `Grade ${child.grade}`}
+                      {getGradeLabel(child.grade, language)}
                     </span>
                     <span>·</span>
                     <span className="truncate max-w-[140px]">{child.school}</span>
@@ -235,7 +237,7 @@ export const ParentDashboard: React.FC<ParentDashboardProps> = ({
                 <div className="flex items-center gap-2 flex-wrap">
                   <span className="font-mono text-xs font-bold text-slate-400">#{req.id}</span>
                   <span className="font-bold text-sm text-slate-900 dark:text-white">
-                    {req.studentName} ({language === 'am' ? `${req.grade}ኛ ክፍል` : `Grade ${req.grade}`})
+                    {req.studentName} ({getGradeLabel(req.grade, language)})
                   </span>
                   <span>·</span>
                   <span className="text-xs text-slate-600 dark:text-slate-300">
@@ -315,9 +317,9 @@ export const ParentDashboard: React.FC<ParentDashboardProps> = ({
               className="px-2.5 py-1.5 text-xs rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none cursor-pointer"
             >
               <option value="all">{t.allGrades}</option>
-              {[1, 2, 3, 4, 5, 6].map((g) => (
-                <option key={g} value={g}>
-                  {language === 'am' ? `${g}ኛ ክፍል` : `Grade ${g}`}
+              {gradeLevels.map(({ value }) => (
+                <option key={value} value={value}>
+                  {getGradeLabel(value, language)}
                 </option>
               ))}
             </select>
@@ -334,11 +336,10 @@ export const ParentDashboard: React.FC<ParentDashboardProps> = ({
               <div className="space-y-3">
                 {/* Tutor Card Header */}
                 <div className="flex items-start gap-4">
-                  <img
+                  <TutorAvatar
                     src={tutor.avatar}
-                    alt={tutor.name}
+                    name={tutor.name}
                     className="w-16 h-16 rounded-xl object-cover border-2 border-amber-400/80 dark:border-amber-400/60 shadow-xs shrink-0"
-                    referrerPolicy="no-referrer"
                   />
                   <div className="space-y-0.5 flex-1 min-w-0">
                     <div className="flex items-center justify-between">
@@ -388,7 +389,7 @@ export const ParentDashboard: React.FC<ParentDashboardProps> = ({
                     <span className="font-medium text-slate-700 dark:text-slate-300">
                       {language === 'am' ? 'ክፍሎች:' : 'Grades:'}
                     </span>{' '}
-                    {tutor.gradesSupported.map(g => `${g}th`).join(', ')}
+                    {tutor.gradesSupported.map((grade) => getGradeLabel(grade, language)).join(', ')}
                   </div>
                 </div>
 

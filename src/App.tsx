@@ -134,11 +134,13 @@ export default function App() {
     setTutors(prev => [newTutor, ...prev]);
     setIsRegisterTutorOpen(false);
     setIsLoginPageOpen(false);
-    setCurrentRole('tutor');
+    if (currentRole !== 'admin') {
+      setCurrentRole('tutor');
+    }
     showToast(
       language === 'am'
-        ? `እንኳን ደህና መጡ ${newTutor.amharicName || newTutor.name}! የአስጠኚ መለያዎ በተሳካ ሁኔታ ተፈጥሯል።`
-        : `Welcome ${newTutor.name}! Your tutor profile has been registered successfully.`
+        ? `አስጠኚው ${newTutor.amharicName || newTutor.name} በተሳካ ሁኔታ ተመዝግቧል።`
+        : `${newTutor.name} has been registered successfully.`
     );
   };
 
@@ -437,7 +439,7 @@ export default function App() {
       )}
 
       {/* Main Content Viewport */}
-      <main className="flex-1 w-full px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+      <main className="flex-1 w-full min-w-0 px-3 sm:px-6 lg:px-8 py-4 sm:py-8">
         
         {/* Dedicated Login Screen */}
         {isLoginPageOpen ? (
@@ -506,6 +508,7 @@ export default function App() {
                 }}
                 onApproveBonus={handleApproveBonus}
                 onVerifyTutor={() => {}}
+                onOpenRegisterTutor={() => setIsRegisterTutorOpen(true)}
                 onBackToHome={() => {
                   setCurrentRole('guest');
                   setActiveTab('home');

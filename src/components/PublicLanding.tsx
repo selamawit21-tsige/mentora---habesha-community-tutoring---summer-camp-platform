@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { PackageOffer, SpecialIncentive, SummerActivity, AgazBook, Language, UserRole, Tutor } from '../types';
 import { translations } from '../data/translations';
+import { TutorAvatar } from './TutorAvatar';
 import mentoraLogo from '../mentora.jpg';
 import { 
   GraduationCap, Sparkles, Check, Star, ShieldCheck, HeartHandshake, 
@@ -184,11 +185,10 @@ export const PublicLanding: React.FC<PublicLandingProps> = ({
             >
               <div className="space-y-3">
                 <div className="flex items-start gap-4">
-                  <img
+                  <TutorAvatar
                     src={tutor.avatar}
-                    alt={tutor.name}
+                    name={tutor.name}
                     className="w-16 h-16 rounded-xl object-cover border-2 border-amber-400 shadow-xs shrink-0"
-                    referrerPolicy="no-referrer"
                   />
                   <div className="space-y-0.5 flex-1 min-w-0">
                     <h3 className="font-bold text-sm text-slate-900 dark:text-white truncate">
@@ -362,7 +362,7 @@ export const PublicLanding: React.FC<PublicLandingProps> = ({
       </section>
 
       {/* 3. The 5 Special Mentora Privileges & Rules */}
-      <section className="bg-slate-50 dark:bg-slate-900/60 rounded-3xl p-8 sm:p-10 border border-slate-200 dark:border-slate-800 space-y-8">
+      <section className="bg-slate-50 dark:bg-slate-900/60 rounded-3xl p-4 sm:p-8 lg:p-10 border border-slate-200 dark:border-slate-800 space-y-8">
         <div className="text-center max-w-2xl mx-auto space-y-2">
           <span className="text-xs font-bold text-amber-600 dark:text-amber-400 uppercase tracking-wider">
             {language === 'am' ? 'የማህበረሰብ ማበረታቻዎች' : '5 Community Privileges'}
@@ -727,8 +727,8 @@ export const PublicLanding: React.FC<PublicLandingProps> = ({
         <div className="flex items-center gap-3">
           <img
             src={mentoraLogo}
-            alt="Mentora"
-            className="w-20 h-7 rounded-lg object-contain bg-white"
+            alt="Mentora logo"
+            className="w-7 h-7 rounded-lg object-contain"
           />
           <span className="font-bold text-slate-900 dark:text-white">Mentora</span>
           <span>·</span>

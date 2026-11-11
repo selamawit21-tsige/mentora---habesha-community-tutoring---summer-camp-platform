@@ -1,6 +1,8 @@
 import React from 'react';
 import { Tutor, Language } from '../../types';
 import { translations } from '../../data/translations';
+import { getGradeLabel } from '../../data/gradeLevels';
+import { TutorAvatar } from '../TutorAvatar';
 import { X, Star, ShieldCheck, Award, GraduationCap, Calendar, Clock, BookOpen } from 'lucide-react';
 
 interface TutorDetailModalProps {
@@ -23,8 +25,8 @@ export const TutorDetailModal: React.FC<TutorDetailModalProps> = ({
   if (!isOpen || !tutor) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-xs overflow-y-auto">
-      <div className="relative w-full max-w-2xl bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 p-6 md:p-8 my-8 transition-all">
+    <div className="fixed inset-0 z-50 flex items-start sm:items-center justify-center p-2 sm:p-4 bg-slate-950/70 backdrop-blur-xs overflow-y-auto">
+      <div className="relative w-full max-w-2xl max-h-[calc(100dvh-2rem)] overflow-y-auto overscroll-contain bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 p-4 sm:p-6 md:p-8 my-2 sm:my-8 transition-all">
         
         {/* Close Button */}
         <button
@@ -36,11 +38,10 @@ export const TutorDetailModal: React.FC<TutorDetailModalProps> = ({
 
         {/* Header Profile */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-5 pb-6 border-b border-slate-200 dark:border-slate-800">
-          <img
+          <TutorAvatar
             src={tutor.avatar}
-            alt={tutor.name}
+            name={tutor.name}
             className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl object-cover shadow-sm border border-slate-200 dark:border-slate-700"
-            referrerPolicy="no-referrer"
           />
           <div className="space-y-1.5 flex-1">
             <div className="flex items-center gap-2 flex-wrap">
@@ -118,7 +119,7 @@ export const TutorDetailModal: React.FC<TutorDetailModalProps> = ({
                     key={g}
                     className="px-2.5 py-1 text-xs bg-blue-50 dark:bg-blue-950/40 rounded-md border border-blue-200 dark:border-blue-800 text-blue-900 dark:text-blue-300 font-semibold"
                   >
-                    {language === 'am' ? `${g}ኛ ክፍል` : `Grade ${g}`}
+                    {getGradeLabel(g, language)}
                   </span>
                 ))}
               </div>

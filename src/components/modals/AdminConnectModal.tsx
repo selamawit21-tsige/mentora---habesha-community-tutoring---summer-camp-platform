@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ConnectionRequest, Tutor, Language } from '../../types';
 import { translations } from '../../data/translations';
+import { getGradeLabel } from '../../data/gradeLevels';
 import { X, ShieldCheck, Check, Calendar, User, Phone, BookOpen, AlertCircle } from 'lucide-react';
 
 interface AdminConnectModalProps {
@@ -52,8 +53,8 @@ export const AdminConnectModal: React.FC<AdminConnectModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-xs overflow-y-auto">
-      <div className="relative w-full max-w-xl bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 p-6 md:p-7 my-8 transition-all">
+    <div className="fixed inset-0 z-50 flex items-start sm:items-center justify-center p-2 sm:p-4 bg-slate-950/70 backdrop-blur-xs overflow-y-auto">
+      <div className="relative w-full max-w-xl max-h-[calc(100dvh-2rem)] overflow-y-auto overscroll-contain bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 p-4 sm:p-6 md:p-7 my-2 sm:my-8 transition-all">
         
         {/* Header */}
         <div className="flex items-center justify-between pb-4 border-b border-slate-200 dark:border-slate-800">
@@ -87,7 +88,7 @@ export const AdminConnectModal: React.FC<AdminConnectModalProps> = ({
             <div className="flex justify-between items-center font-semibold text-slate-900 dark:text-white">
               <span className="flex items-center gap-1.5">
                 <User className="w-3.5 h-3.5 text-blue-900 dark:text-blue-400" />
-                {request.studentName} ({language === 'am' ? `${request.grade}ኛ ክፍል` : `Grade ${request.grade}`})
+                {request.studentName} ({getGradeLabel(request.grade, language)})
               </span>
               <span className="px-2 py-0.5 rounded bg-blue-100 dark:bg-blue-900/40 text-blue-800 dark:text-blue-300 font-bold">
                 {request.packageType === 'private_3500' ? '3,500 ETB Private' : '2,500 ETB Group'}

@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Tutor, Student, ConnectionRequest, StudentGrowthLog, Language } from '../../types';
 import { translations } from '../../data/translations';
+import { getGradeLabel } from '../../data/gradeLevels';
+import { TutorAvatar } from '../TutorAvatar';
 import { 
   GraduationCap, Award, ShieldCheck, Star, Users, CheckCircle, 
   Clock, ArrowRight, HeartHandshake, Dumbbell, BookOpen, AlertCircle, 
@@ -20,16 +22,6 @@ interface TutorDashboardProps {
   onOpenEditProfileModal: () => void;
 }
 
-// Cultural Habesha profile pictures selection
-const habeshaAvatarOptions = [
-  { url: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&auto=format&fit=crop&q=80', label: 'Bethlehem T. (AAU)' },
-  { url: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&auto=format&fit=crop&q=80', label: 'Dawit M. (Hawassa)' },
-  { url: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&auto=format&fit=crop&q=80', label: 'Selamawit H. (ASTU)' },
-  { url: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&auto=format&fit=crop&q=80', label: 'Natnael G. (Jimma)' },
-  { url: 'https://images.unsplash.com/photo-1567532939604-b6b5b0db2604?w=400&auto=format&fit=crop&q=80', label: 'Tsion K. (Addis Ababa)' },
-  { url: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=400&auto=format&fit=crop&q=80', label: 'Mahlet A. (Mekelle)' },
-];
-
 export const TutorDashboard: React.FC<TutorDashboardProps> = ({
   currentTutor,
   assignedStudents,
@@ -43,7 +35,6 @@ export const TutorDashboard: React.FC<TutorDashboardProps> = ({
   onOpenEditProfileModal,
 }) => {
   const t = translations[language];
-  const [isAvatarPickerOpen, setIsAvatarPickerOpen] = useState(false);
   const directFileInputRef = React.useRef<HTMLInputElement>(null);
 
   // Calculate total bonuses earned by this tutor
@@ -127,13 +118,11 @@ export const TutorDashboard: React.FC<TutorDashboardProps> = ({
                 className="hidden"
               />
 
-              <img
+              <TutorAvatar
                 src={currentTutor.avatar}
-                alt={currentTutor.name}
+                name={currentTutor.name}
                 onClick={() => directFileInputRef.current?.click()}
-                title="Click to select image file from computer or phone"
                 className="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl object-cover border-3 border-amber-400 shadow-xl cursor-pointer hover:opacity-90 transition-opacity"
-                referrerPolicy="no-referrer"
               />
 
               <div className="flex items-center gap-1 absolute -bottom-2 -right-2">
@@ -145,14 +134,6 @@ export const TutorDashboard: React.FC<TutorDashboardProps> = ({
                 >
                   <Camera className="w-3.5 h-3.5" />
                   <span>{language === 'am' ? 'ፎቶ ምረጥ' : 'Select Photo'}</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setIsAvatarPickerOpen(!isAvatarPickerOpen)}
-                  title="More photo options"
-                  className="p-2 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-100 rounded-xl shadow-md cursor-pointer text-[10px] font-bold"
-                >
-                  Presets
                 </button>
               </div>
             </div>
@@ -203,48 +184,6 @@ export const TutorDashboard: React.FC<TutorDashboardProps> = ({
           </div>
         </div>
 
-        {/* Avatar Picker Dropdown */}
-        {isAvatarPickerOpen && (
-          <div className="mt-6 pt-5 border-t border-slate-700/80 relative z-20 animate-in fade-in">
-            <div className="flex items-center justify-between mb-3">
-              <span className="text-xs font-bold text-amber-300">
-                {language === 'am' ? 'የአስጠኚ ፎቶዎን ይምረጡ (የሀበሻ መምህራን ፎቶዎች):' : 'Select Your Profile Picture (Habesha Educator Portraits):'}
-              </span>
-              <button
-                onClick={() => setIsAvatarPickerOpen(false)}
-                className="text-xs text-slate-400 hover:text-white"
-              >
-                Close
-              </button>
-            </div>
-            <div className="grid grid-cols-3 sm:grid-cols-6 gap-3">
-              {habeshaAvatarOptions.map((opt, i) => (
-                <div
-                  key={i}
-                  onClick={() => {
-                    onUpdateTutorAvatar(opt.url);
-                    setIsAvatarPickerOpen(false);
-                  }}
-                  className={`p-1.5 rounded-xl border cursor-pointer transition-all text-center space-y-1 ${
-                    currentTutor.avatar === opt.url
-                      ? 'border-amber-400 bg-amber-400/20 ring-2 ring-amber-400'
-                      : 'border-slate-700 hover:border-slate-500 bg-slate-800/60'
-                  }`}
-                >
-                  <img
-                    src={opt.url}
-                    alt={opt.label}
-                    className="w-14 h-14 rounded-lg object-cover mx-auto"
-                    referrerPolicy="no-referrer"
-                  />
-                  <span className="text-[10px] text-slate-300 block truncate">
-                    {opt.label}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
       </div>
 
       {/* Section 1: My Assigned Students (Connected by Admin) */}
@@ -289,7 +228,7 @@ export const TutorDashboard: React.FC<TutorDashboardProps> = ({
                   
                   <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                     <span className="font-semibold text-blue-900 dark:text-amber-400">
-                      {language === 'am' ? `${student.grade}ኛ ክፍል` : `Grade ${student.grade}`}
+                      {getGradeLabel(student.grade, language)}
                     </span>
                     <span>·</span>
                     <span className="truncate">{student.school}</span>
@@ -351,7 +290,7 @@ export const TutorDashboard: React.FC<TutorDashboardProps> = ({
         </div>
       </section>
 
-      {/* Section 2: Open Student Inquiries Seeking Tutors (Grades 1-6) */}
+      {/* Section 2: Open Student Inquiries Seeking Tutors (KG 1 through Grade 8) */}
       <section className="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-xs space-y-4">
         <div>
           <h2 className="text-lg font-bold text-slate-900 dark:text-white">
@@ -374,7 +313,7 @@ export const TutorDashboard: React.FC<TutorDashboardProps> = ({
                 <div className="flex items-center gap-2.5 flex-wrap">
                   <span className="font-mono text-xs font-bold text-slate-400">#{req.id}</span>
                   <span className="font-bold text-sm text-slate-900 dark:text-white">
-                    {req.studentName} ({language === 'am' ? `${req.grade}ኛ ክፍል` : `Grade ${req.grade}`})
+                    {req.studentName} ({getGradeLabel(req.grade, language)})
                   </span>
                   <span>·</span>
                   <span className="text-xs text-blue-900 dark:text-amber-400 font-semibold">
@@ -434,7 +373,7 @@ export const TutorDashboard: React.FC<TutorDashboardProps> = ({
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
                   <span className="font-bold text-sm text-slate-900 dark:text-white">
-                    {log.studentName} ({language === 'am' ? `${log.grade}ኛ ክፍል` : `Grade ${log.grade}`})
+                    {log.studentName} ({getGradeLabel(log.grade, language)})
                   </span>
                   <span className="text-xs text-slate-400">· {log.date}</span>
                 </div>

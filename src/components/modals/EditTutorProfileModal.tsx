@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Tutor, Language } from '../../types';
 import { translations } from '../../data/translations';
+import { TutorAvatar } from '../TutorAvatar';
 import { X, Camera, Upload, Check, Star, ShieldCheck, Sparkles } from 'lucide-react';
 
 interface EditTutorProfileModalProps {
@@ -10,15 +11,6 @@ interface EditTutorProfileModalProps {
   language: Language;
   onSaveProfile: (updatedTutor: Tutor) => void;
 }
-
-const habeshaPresetPortraits = [
-  { url: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&auto=format&fit=crop&q=80', label: 'Bethlehem T. (AAU Eng)' },
-  { url: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&auto=format&fit=crop&q=80', label: 'Dawit M. (Hawassa)' },
-  { url: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&auto=format&fit=crop&q=80', label: 'Selamawit H. (ASTU)' },
-  { url: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&auto=format&fit=crop&q=80', label: 'Natnael G. (Jimma)' },
-  { url: 'https://images.unsplash.com/photo-1567532939604-b6b5b0db2604?w=400&auto=format&fit=crop&q=80', label: 'Tsion K. (Addis Ababa)' },
-  { url: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=400&auto=format&fit=crop&q=80', label: 'Mahlet A. (Mekelle)' },
-];
 
 export const EditTutorProfileModal: React.FC<EditTutorProfileModalProps> = ({
   isOpen,
@@ -37,8 +29,6 @@ export const EditTutorProfileModal: React.FC<EditTutorProfileModalProps> = ({
   const [gpa, setGpa] = useState(tutor.gpa);
   const [monthlyRate, setMonthlyRate] = useState(tutor.monthlyRate);
   const [bio, setBio] = useState(tutor.bio);
-  const [customUrl, setCustomUrl] = useState('');
-
   if (!isOpen) return null;
 
   // Handle local image file upload with automatic downsampling/compression
@@ -84,13 +74,6 @@ export const EditTutorProfileModal: React.FC<EditTutorProfileModalProps> = ({
     }
   };
 
-  const handleApplyCustomUrl = () => {
-    if (customUrl.trim()) {
-      setAvatar(customUrl.trim());
-      setCustomUrl('');
-    }
-  };
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onSaveProfile({
@@ -108,8 +91,8 @@ export const EditTutorProfileModal: React.FC<EditTutorProfileModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-xs overflow-y-auto">
-      <div className="relative w-full max-w-2xl bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-800 p-6 md:p-8 my-8 transition-all">
+    <div className="fixed inset-0 z-50 flex items-start sm:items-center justify-center p-2 sm:p-4 bg-slate-950/70 backdrop-blur-xs overflow-y-auto">
+      <div className="relative w-full max-w-2xl max-h-[calc(100dvh-2rem)] overflow-y-auto overscroll-contain bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-800 p-4 sm:p-6 md:p-8 my-2 sm:my-8 transition-all">
         
         {/* Header */}
         <div className="flex items-center justify-between pb-4 border-b border-slate-200 dark:border-slate-800">
@@ -136,7 +119,7 @@ export const EditTutorProfileModal: React.FC<EditTutorProfileModalProps> = ({
 
         <form onSubmit={handleSubmit} className="mt-6 space-y-6">
           
-          {/* Profile Picture Upload & Selection */}
+          {/* Profile Picture Upload */}
           <div className="p-4 bg-slate-50 dark:bg-slate-800/60 rounded-2xl border border-slate-200 dark:border-slate-700 space-y-4">
             <span className="text-xs font-bold text-slate-900 dark:text-white block flex items-center gap-1.5">
               <Camera className="w-4 h-4 text-amber-500" />
@@ -146,11 +129,10 @@ export const EditTutorProfileModal: React.FC<EditTutorProfileModalProps> = ({
             <div className="flex flex-col sm:flex-row items-center gap-5">
               {/* Circular Preview */}
               <div className="relative group shrink-0">
-                <img
+                <TutorAvatar
                   src={avatar}
-                  alt="Tutor Avatar Preview"
+                  name={name}
                   className="w-24 h-24 rounded-2xl object-cover border-3 border-amber-400 shadow-md"
-                  referrerPolicy="no-referrer"
                 />
                 <div className="absolute inset-0 bg-black/40 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white text-[10px] font-bold">
                   Preview
@@ -172,53 +154,6 @@ export const EditTutorProfileModal: React.FC<EditTutorProfileModalProps> = ({
                   </label>
                 </div>
 
-                {/* Paste URL */}
-                <div className="flex items-center gap-2">
-                  <input
-                    type="url"
-                    value={customUrl}
-                    onChange={(e) => setCustomUrl(e.target.value)}
-                    placeholder="https://... (or paste web photo URL)"
-                    className="flex-1 px-3 py-1.5 text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none"
-                  />
-                  <button
-                    type="button"
-                    onClick={handleApplyCustomUrl}
-                    className="px-3 py-1.5 text-xs font-semibold text-blue-950 dark:text-amber-400 bg-blue-50 dark:bg-slate-800 rounded-xl hover:bg-blue-100 transition-colors cursor-pointer"
-                  >
-                    Apply
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            {/* Curated Habesha Portrait Presets */}
-            <div className="pt-3 border-t border-slate-200 dark:border-slate-700 space-y-2">
-              <span className="text-[11px] font-semibold text-slate-600 dark:text-slate-300 block">
-                {t.selectHabeshaPhoto}:
-              </span>
-              <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
-                {habeshaPresetPortraits.map((preset, i) => (
-                  <div
-                    key={i}
-                    onClick={() => setAvatar(preset.url)}
-                    className={`p-1 rounded-xl border cursor-pointer transition-all text-center space-y-1 ${
-                      avatar === preset.url
-                        ? 'border-amber-500 bg-amber-50 dark:bg-amber-950/40 ring-2 ring-amber-400'
-                        : 'border-slate-200 dark:border-slate-700 hover:border-slate-300 bg-white dark:bg-slate-900'
-                    }`}
-                  >
-                    <img
-                      src={preset.url}
-                      alt={preset.label}
-                      className="w-12 h-12 rounded-lg object-cover mx-auto"
-                      referrerPolicy="no-referrer"
-                    />
-                    <span className="text-[9px] text-slate-500 dark:text-slate-400 block truncate">
-                      {preset.label}
-                    </span>
-                  </div>
-                ))}
               </div>
             </div>
           </div>

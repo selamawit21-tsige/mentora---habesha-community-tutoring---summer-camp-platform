@@ -67,8 +67,8 @@ export const Navbar: React.FC<NavbarProps> = ({
 
   return (
     <header className="sticky top-0 z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 transition-colors shadow-xs">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between gap-4 h-18">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between gap-2 sm:gap-4 h-16 sm:h-18 min-w-0">
           
           {/* Zone 1: Mentora Brand with "Home to Home Tutors" */}
           <button 
@@ -76,20 +76,18 @@ export const Navbar: React.FC<NavbarProps> = ({
               onRoleChange('guest');
               onNavigateTab('home');
             }}
-            className="flex items-center gap-3 text-left focus:outline-none group shrink-0 cursor-pointer"
+            className="flex items-center gap-2 sm:gap-3 text-left focus:outline-none group min-w-0 cursor-pointer"
           >
-            <div className="w-20 h-11 rounded-xl overflow-hidden bg-white shadow-xs border border-slate-200/80 shrink-0 transition-transform group-hover:scale-105">
-              <img
-                src={mentoraLogo}
-                alt="Mentora Logo"
-                className="w-full h-full object-contain"
-              />
-            </div>
+            <img
+              src={mentoraLogo}
+              alt="Mentora logo"
+              className="w-9 h-9 sm:w-11 sm:h-11 rounded-xl object-contain border border-slate-200/80 shadow-xs shrink-0 transition-transform group-hover:scale-105"
+            />
             <div className="flex flex-col">
-              <span className="text-xl font-extrabold tracking-tight text-slate-950 dark:text-white leading-tight">
+              <span className="text-lg sm:text-xl font-extrabold tracking-tight text-slate-950 dark:text-white leading-tight">
                 {t.brandName}
               </span>
-              <span className="text-[11px] font-semibold text-amber-600 dark:text-amber-400 whitespace-nowrap">
+              <span className="hidden sm:inline text-[11px] font-semibold text-amber-600 dark:text-amber-400 whitespace-nowrap">
                 {t.subtitleHome}
               </span>
             </div>
@@ -142,23 +140,25 @@ export const Navbar: React.FC<NavbarProps> = ({
           </nav>
 
           {/* Zone 3: Language Toggle, Clean Portal Switcher, and Primary Action */}
-          <div className="flex items-center gap-2.5 shrink-0">
+          <div className="flex items-center gap-1 sm:gap-2.5 shrink-0">
             
             {/* Language Switcher */}
             <button
               onClick={onLanguageToggle}
               title="Toggle English / አማርኛ"
-              className="flex items-center gap-1.5 px-3 py-2 text-xs font-semibold rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-slate-200 hover:border-amber-400 hover:text-amber-600 dark:hover:text-amber-300 transition-all cursor-pointer whitespace-nowrap"
+              aria-label="Toggle English / አማርኛ"
+              className="flex items-center gap-1.5 px-2 sm:px-3 py-2 text-xs font-semibold rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-slate-200 hover:border-amber-400 hover:text-amber-600 dark:hover:text-amber-300 transition-all cursor-pointer whitespace-nowrap"
             >
               <Globe className="w-3.5 h-3.5 text-amber-600" />
-              <span>{language === 'en' ? 'አማርኛ' : 'English'}</span>
+              <span className="hidden sm:inline">{language === 'en' ? 'አማርኛ' : 'English'}</span>
             </button>
 
             {/* Clean, Elegant Role Switcher Dropdown */}
             <div className="relative" ref={dropdownRef}>
               <button
                 onClick={() => setIsRoleDropdownOpen(!isRoleDropdownOpen)}
-                className="flex items-center gap-2 px-3 py-2 text-xs font-semibold rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white hover:bg-slate-50 dark:hover:bg-slate-700/60 transition-all cursor-pointer shadow-2xs"
+                aria-label={getRoleLabel(currentRole)}
+                className="flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-2 text-xs font-semibold rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white hover:bg-slate-50 dark:hover:bg-slate-700/60 transition-all cursor-pointer shadow-2xs"
               >
                 {getRoleIcon(currentRole)}
                 <span className="hidden sm:inline">{getRoleLabel(currentRole)}</span>
@@ -278,11 +278,11 @@ export const Navbar: React.FC<NavbarProps> = ({
             {/* Primary Action */}
             <button
               onClick={onRequestTutorClick}
-              className="px-3.5 sm:px-4 py-2 text-xs font-bold text-white bg-blue-950 dark:bg-blue-900 hover:bg-blue-900 dark:hover:bg-blue-800 rounded-xl shadow-xs transition-all whitespace-nowrap shrink-0 cursor-pointer flex items-center gap-1.5"
+              className="px-2 sm:px-4 py-2 text-xs font-bold text-white bg-blue-950 dark:bg-blue-900 hover:bg-blue-900 dark:hover:bg-blue-800 rounded-xl shadow-xs transition-all whitespace-nowrap shrink-0 cursor-pointer flex items-center gap-1.5"
             >
               <GraduationCap className="w-4 h-4 text-amber-400" />
               <span className="hidden sm:inline">{t.requestTutorBtn}</span>
-              <span className="sm:hidden">{language === 'am' ? 'አስጠኚ ፈልግ' : 'Find Tutor'}</span>
+              <span className="hidden min-[380px]:inline sm:hidden">{language === 'am' ? 'አስጠኚ ፈልግ' : 'Find Tutor'}</span>
             </button>
           </div>
 
